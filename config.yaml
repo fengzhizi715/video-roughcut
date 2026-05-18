@@ -1,0 +1,15 @@
+input_dir: null
+output_dir: outputs
+silence_threshold: -35
+min_silence_duration: 0.6
+padding_before: 0.25
+padding_after: 0.25
+min_clip_duration: 0.5
+quality_profile: high
+video_codec: libx264
+audio_codec: aac
+video_crf: 16
+video_preset: slower
+audio_bitrate: 256k
+output_suffix: "_rough"
+overwrite: false
