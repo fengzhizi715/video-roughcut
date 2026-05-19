@@ -5,6 +5,8 @@ import sys
 
 from .backends.auto_editor import AutoEditorBackend, BackendError
 from .config import ConfigError, build_config
+from .merge import main as merge_main
+from .packaging.cli import main as packaging_main
 from .reporting import write_cut_log, write_report
 from .runner import run_batch
 from .tools import DependencyError, require_dependencies
@@ -33,6 +35,13 @@ def create_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: list[str] | None = None) -> int:
+    argv = argv if argv is not None else sys.argv[1:]
+
+    if argv and argv[0] == "package":
+        return packaging_main(argv[1:])
+    if argv and argv[0] == "merge":
+        return merge_main(argv[1:])
+
     parser = create_parser()
     args = parser.parse_args(argv)
     try:
