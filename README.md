@@ -97,6 +97,14 @@ pip install -r requirements.txt
 4. 把项目安装成命令
 
 ```bash
+pip install -e .
+```
+
+通常直接用这条命令就够了，也最不容易踩到构建环境缺失的问题。
+
+如果你非常确定当前虚拟环境里已经装好了构建依赖，例如 `setuptools>=68`，才考虑使用：
+
+```bash
 pip install --no-build-isolation -e .
 ```
 
@@ -183,7 +191,7 @@ pip install -r requirements.txt
 ### 安装成命令
 
 ```bash
-pip install --no-build-isolation -e .
+pip install -e .
 ```
 
 这里的 `-e` 表示 editable install。它的好处是：
@@ -191,6 +199,17 @@ pip install --no-build-isolation -e .
 - 会生成 `video-roughcut` 这个命令
 - 你改了 `src/` 里的代码后，不需要每次重新打包安装
 - 很适合开发阶段和 skill 封装阶段
+
+默认推荐这条命令，因为 `pip` 会更稳地处理构建环境。
+
+如果你想使用 `--no-build-isolation`，先确保当前虚拟环境里已经安装了构建依赖：
+
+```bash
+pip install "setuptools>=68" wheel
+pip install --no-build-isolation -e .
+```
+
+否则可能会遇到类似 `Cannot import 'setuptools.build_meta'` 的报错。
 
 ### 只想本地跑源码，不安装命令
 
