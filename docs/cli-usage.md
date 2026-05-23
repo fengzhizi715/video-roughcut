@@ -12,8 +12,6 @@
   - 批量处理目录中的视频
 - `video-roughcut merge ... --output ...`
   - 先把多段录制合并成一个完整源视频
-- `video-roughcut package --input ... --metadata ...`
-  - 给粗剪结果加上 HyperFrames 包装
 
 ## 处理单个视频
 
