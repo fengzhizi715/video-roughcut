@@ -1,2 +1,1 @@
 PyYAML>=6.0
-auto-editor>=26.0.0

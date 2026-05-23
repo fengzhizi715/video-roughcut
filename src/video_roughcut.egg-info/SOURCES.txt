@@ -4,6 +4,7 @@ src/video_roughcut/__init__.py
 src/video_roughcut/cli.py
 src/video_roughcut/config.py
 src/video_roughcut/discovery.py
+src/video_roughcut/merge.py
 src/video_roughcut/models.py
 src/video_roughcut/reporting.py
 src/video_roughcut/runner.py
@@ -18,6 +19,9 @@ src/video_roughcut/backends/__init__.py
 src/video_roughcut/backends/auto_editor.py
 src/video_roughcut/backends/base.py
 tests/test_backend.py
+tests/test_cli.py
 tests/test_config.py
 tests/test_discovery.py
+tests/test_merge.py
 tests/test_reporting.py
+tests/test_tools.py

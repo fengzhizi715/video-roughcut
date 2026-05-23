@@ -29,7 +29,6 @@ macOS 可用的视频自动粗剪工具，面向技术口播和屏幕录制。
 - 支持 `dry-run`，只分析不导出视频
 - 输出 `cut_log.json`
 - 输出 `report.md`
-- 支持 HyperFrames 包装实验模块
 - 后端已预留扩展点，后续可新增纯 `FFmpeg` 实现
 
 ## 快速开始
@@ -230,7 +229,6 @@ PYTHONPATH=src python -m video_roughcut.cli --help
 - `video-roughcut /path/to/demo.mp4`
 - `video-roughcut /path/to/videos`
 - `video-roughcut merge ... --output ...`
-- `video-roughcut package --input ... --metadata ...`
 
 ## 配置文件
 
@@ -316,105 +314,6 @@ overwrite: false
 如果缺少任一依赖，会给出清晰报错，不会直接失败退出到难以理解的堆栈。
 
 `merge` 子命令只依赖 `ffmpeg`，不会额外检查 `ffprobe` 或 `auto-editor`。
-
-## HyperFrames 包装实验
-
-这个实验模块用于验证 HyperFrames 是否适合给《Codex 工程实践》系列做统一包装。
-
-### 第一版能力
-
-- 根据 `metadata.yaml` 生成 3 秒片头标题卡
-- 根据 `chapters` 生成独立章节转场卡
-- 生成 3 秒片尾页
-- 使用 FFmpeg 合成 `intro.mp4 + rough_cut.mp4 + outro.mp4 = final.mp4`
-- 章节卡先只独立输出，不自动插入主视频
-
-### 当前不做
-
-- 字幕
-- 自动章节识别
-- 自动插入章节卡
-- 复杂包装系统
-
-### 包装风格
-
-- 深色科技感
-- 蓝紫霓虹
-- 工程系统感
-- 不要卡通
-- 不要机器人
-
-### 额外依赖
-
-除了已有的 `ffmpeg` 之外，还需要 Node.js 22+，因为包装实验模块通过 `npx hyperframes` 渲染：
-
-```bash
-node --version
-npx hyperframes --help
-```
-
-如果是首次运行，`npx` 可能需要先下载 HyperFrames CLI，因此会比后续调用慢一些。
-
-### metadata 格式
-
-第一版只支持极简结构：
-
-```yaml
-title: Codex 工程实践 01｜从粗剪到统一包装
-chapters:
-  - title: 为什么先做粗剪
-  - title: HyperFrames 包装实验
-  - title: 下一步计划
-```
-
-仓库里有一个可直接参考的示例：
-
-[examples/package_metadata.yaml](/Users/tony/PycharmProjects/video-roughcut/examples/package_metadata.yaml)
-
-### 运行方式
-
-假设你已经有粗剪结果 `rough_cut.mp4`：
-
-```bash
-./run.sh package \
-  --input /path/to/rough_cut.mp4 \
-  --metadata /path/to/metadata.yaml
-```
-
-也可以指定包装输出目录：
-
-```bash
-./run.sh package \
-  --input /path/to/rough_cut.mp4 \
-  --metadata /path/to/metadata.yaml \
-  --output-dir outputs/package
-```
-
-### 输出目录结构
-
-默认会输出到：
-
-```text
-outputs/package/<metadata-slug>/
-├── final.mp4
-├── intro.mp4
-├── outro.mp4
-├── metadata.yaml
-├── chapters/
-│   ├── chapter_01.mp4
-│   ├── chapter_02.mp4
-│   └── ...
-└── projects/
-    ├── intro/
-    ├── outro/
-    └── chapter_01/
-```
-
-其中：
-
-- `final.mp4` 是 `intro + rough_cut + outro` 的合成结果
-- `chapters/` 里是独立章节卡
-- `projects/` 里保留了 HyperFrames 项目源码，方便后续继续调风格和动画
 
 ## 当前实现说明
 

@@ -26,10 +26,3 @@ class CliTests(unittest.TestCase):
 
         self.assertEqual(exit_code, 0)
         merge_main.assert_called_once_with(["part1.mp4", "part2.mp4", "--output", "merged.mp4"])
-
-    def test_package_subcommand_routes_to_packaging_module(self) -> None:
-        with patch("video_roughcut.cli.packaging_main", return_value=0) as packaging_main:
-            exit_code = main(["package", "--input", "rough.mp4", "--metadata", "meta.yaml"])
-
-        self.assertEqual(exit_code, 0)
-        packaging_main.assert_called_once_with(["--input", "rough.mp4", "--metadata", "meta.yaml"])

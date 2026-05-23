@@ -1,0 +1,4 @@
+interface:
+  display_name: "Video Roughcut Workflow"
+  short_description: "Map rough-cut requests to the video-roughcut CLI workflow"
+  default_prompt: "Use $video-roughcut-workflow to rough-cut a video, batch-process a folder, or merge split recordings before rough-cutting."
