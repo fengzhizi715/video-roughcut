@@ -61,7 +61,7 @@ class BuildConfigTests(unittest.TestCase):
     def test_missing_input_raises(self) -> None:
         args = argparse.Namespace(
             input=None,
-            config="missing.yaml",
+            config=None,
             output_dir=None,
             silence_threshold=None,
             min_silence_duration=None,
@@ -81,6 +81,29 @@ class BuildConfigTests(unittest.TestCase):
         with self.assertRaises(ConfigError):
             build_config(args)
 
+    def test_explicit_missing_config_raises(self) -> None:
+        args = argparse.Namespace(
+            input="/tmp/input.mp4",
+            config="/tmp/does-not-exist-video-roughcut.yaml",
+            output_dir=None,
+            silence_threshold=None,
+            min_silence_duration=None,
+            padding_before=None,
+            padding_after=None,
+            min_clip_duration=None,
+            quality_profile=None,
+            video_codec=None,
+            audio_codec=None,
+            video_crf=None,
+            video_preset=None,
+            audio_bitrate=None,
+            output_suffix=None,
+            overwrite=False,
+            dry_run=False,
+        )
+        with self.assertRaisesRegex(ConfigError, "Config file not found"):
+            build_config(args)
+
     def test_invalid_quality_profile_raises(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp_path = Path(tmpdir)
@@ -88,7 +111,7 @@ class BuildConfigTests(unittest.TestCase):
             input_path.write_text("x", encoding="utf-8")
             args = argparse.Namespace(
                 input=str(input_path),
-                config="missing.yaml",
+                config=None,
                 output_dir=None,
                 silence_threshold=None,
                 min_silence_duration=None,

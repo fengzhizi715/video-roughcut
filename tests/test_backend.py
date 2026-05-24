@@ -45,6 +45,38 @@ class BackendTests(unittest.TestCase):
         self.assertIn("--audio-bitrate", command)
         self.assertIn("192k", command)
 
+    def test_build_render_command_applies_smoothing_rules_without_deprecated_speed_flags(self) -> None:
+        config = AppConfig(
+            input_path=Path("/tmp/input.mp4"),
+            output_dir=Path("/tmp/out"),
+            silence_threshold=-35.0,
+            min_silence_duration=0.6,
+            padding_before=0.25,
+            padding_after=0.25,
+            min_clip_duration=0.5,
+            quality_profile="high",
+            video_codec="libx264",
+            audio_codec="aac",
+            video_crf=18,
+            video_preset="slow",
+            audio_bitrate="192k",
+            output_suffix="_rough",
+            overwrite=False,
+            dry_run=False,
+            config_path=None,
+        )
+
+        command = build_render_command(Path("/tmp/input.mp4"), Path("/tmp/out/input_rough.mp4"), config)
+
+        self.assertNotIn("--silent-speed", command)
+        self.assertNotIn("--video-speed", command)
+        self.assertIn("--when-inactive", command)
+        self.assertIn("cut", command)
+        self.assertIn("--when-active", command)
+        self.assertIn("nil", command)
+        self.assertIn("--smooth", command)
+        self.assertIn("0.6s,0.5s", command)
+
     def test_parse_silencedetect_output(self) -> None:
         output = """
         [silencedetect @ 0x0] silence_start: 1.2

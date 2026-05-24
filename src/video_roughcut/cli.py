@@ -14,7 +14,7 @@ from .tools import DependencyError, require_dependencies
 def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Auto rough-cut videos by removing silence and long pauses.")
     parser.add_argument("input", nargs="?", help="Input video file or directory.")
-    parser.add_argument("--config", default="config.yaml", help="Path to config.yaml")
+    parser.add_argument("--config", help="Path to config.yaml")
     parser.add_argument("--output-dir", help="Override output directory")
     parser.add_argument("--silence-threshold", type=float, help="Silence threshold in dB, e.g. -35")
     parser.add_argument("--min-silence-duration", type=float, help="Minimum silence duration in seconds")

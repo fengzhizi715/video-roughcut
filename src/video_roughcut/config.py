@@ -43,8 +43,12 @@ def load_yaml_config(path: Path | None) -> dict:
 
 
 def build_config(args) -> AppConfig:
-    config_path = Path(args.config).expanduser() if args.config else DEFAULT_CONFIG_PATH
-    yaml_data = load_yaml_config(config_path if config_path.exists() else None)
+    if args.config:
+        config_path = Path(args.config).expanduser()
+        yaml_data = load_yaml_config(config_path)
+    else:
+        config_path = DEFAULT_CONFIG_PATH
+        yaml_data = load_yaml_config(config_path if config_path.exists() else None)
 
     input_value = args.input or yaml_data.get("input_dir")
     if not input_value:
