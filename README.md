@@ -279,6 +279,74 @@ overwrite: false
 
 如果你设置了 `video_codec`、`audio_codec`、`video_crf`、`video_preset`、`audio_bitrate`，这些显式参数会覆盖 `quality_profile` 的默认值。
 
+## 默认行为
+
+参数优先级：**命令行参数 > `config.yaml` > 内置默认值**。
+
+### 不传任何参数
+
+直接运行 `video-roughcut`（不传输入路径），会立刻报错：
+
+```text
+Error: Provide an input file/directory via --input or config.yaml input_dir.
+```
+
+（注：错误消息里的 `--input` 是历史文案，实际 CLI 的输入是位置参数 `input`，直接接路径即可，不需要 `--input` 前缀。）
+
+你至少要通过以下两种方式之一告诉它要处理什么：
+
+- 命令行参数：`video-roughcut /path/to/demo.mp4`
+- 配置文件：在 `config.yaml` 里设置 `input_dir: /path/to/videos`
+
+如果命令行和 `config.yaml` 都没给输入，工具不会尝试"用当前目录"或"用上一次跑过的"那种隐式行为。
+
+### 没有 `config.yaml` 时的行为
+
+`config.yaml` 不是必须的。`build_config` 会先尝试加载它：
+
+- 文件存在 → 读取里面的值
+- 文件不存在 → 静默忽略，不报错，继续用内置默认值
+- 文件存在但解析失败（YAML 语法错、不是顶层 mapping）→ 抛 `ConfigError` 并退出
+
+没有 `config.yaml` 时，实际生效的默认值是：
+
+| 字段 | 默认值 | 说明 |
+|------|--------|------|
+| `input_dir` | `null` | 必须显式提供，否则报错 |
+| `output_dir` | `outputs` | 相对当前工作目录 |
+| `silence_threshold` | `-35` | dB |
+| `min_silence_duration` | `0.6` | 秒 |
+| `padding_before` | `0.25` | 秒 |
+| `padding_after` | `0.25` | 秒 |
+| `min_clip_duration` | `0.5` | 秒 |
+| `quality_profile` | `high` |  |
+| `video_codec` | `libx264` | high 预设 |
+| `audio_codec` | `aac` | high 预设 |
+| `video_crf` | `18` | high 预设（与 `config.yaml` 里的 16 不同） |
+| `video_preset` | `slow` | high 预设（与 `config.yaml` 里的 slower 不同） |
+| `audio_bitrate` | `192k` | high 预设（与 `config.yaml` 里的 256k 不同） |
+| `output_suffix` | `_rough` |  |
+| `overwrite` | `false` |  |
+
+也就是说，`config.yaml` 里显式写出的 `video_crf: 16`、`video_preset: slower`、`audio_bitrate: 256k` 会**覆盖** `high` 预设的默认值；删掉 `config.yaml` 后，会回退到 `high` 预设自带的 18 / slow / 192k。如果你想在没有 `config.yaml` 的情况下也拿到 README 文档承诺的最高画质，可以通过命令行显式传：
+
+```bash
+video-roughcut /path/to/demo.mp4 \
+  --video-crf 16 \
+  --video-preset slower \
+  --audio-bitrate 256k
+```
+
+### 自定义配置文件路径
+
+默认找 `./config.yaml`。可以用 `--config` 指定别的位置：
+
+```bash
+video-roughcut --config /path/to/my-config.yaml /path/to/demo.mp4
+```
+
+如果指定的文件不存在，会抛 `ConfigError: Config file not found: ...`，**这种情况和"不传 `--config`、根目录没 `config.yaml`"的静默忽略行为不同**。
+
 ## 输出结果
 
 每次运行会在输出目录中生成：
