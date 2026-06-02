@@ -38,6 +38,7 @@ class AutoEditorBackend(EditorBackend):
 
     def render(self, source_path: Path, output_path: Path, config: AppConfig) -> None:
         command = build_render_command(source_path, output_path, config)
+        print(f"[render] {' '.join(command)}")
         completed = subprocess.run(command, capture_output=True, text=True)
         if completed.returncode != 0:
             raise BackendError(
