@@ -1,10 +1,10 @@
 input_dir: null
 output_dir: outputs
 silence_threshold: -35
-min_silence_duration: 0.6
-padding_before: 0.25
-padding_after: 0.25
-min_clip_duration: 0.5
+min_silence_duration: 0.4
+padding_before: 0.15
+padding_after: 0.15
+min_clip_duration: 0.4
 quality_profile: high
 video_codec: libx264
 audio_codec: aac
