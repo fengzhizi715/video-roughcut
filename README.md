@@ -222,7 +222,7 @@ PYTHONPATH=src python -m video_roughcut.cli --help
 
 完整的命令行说明已拆分到：
 
-[docs/cli-usage.md](/Users/tony/PycharmProjects/video-roughcut/docs/cli-usage.md)
+[docs/cli-usage.md](/docs/cli-usage.md)
 
 如果你只想先记住最常用的几个入口：
 
