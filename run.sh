@@ -86,6 +86,19 @@ is_help_only() {
 }
 
 require_system_tool "python3" "Install Python 3.10+ first."
+
+if [[ "${1:-}" == "--gui" ]]; then
+  require_system_tool "ffmpeg" "Install it with: brew install ffmpeg"
+  require_system_tool "ffprobe" "Install it with: brew install ffmpeg"
+
+  ensure_venv
+  with_bootstrap_lock
+
+  export PYTHONPATH="$ROOT_DIR/src${PYTHONPATH:+:$PYTHONPATH}"
+  shift
+  exec "$VENV_PYTHON" -m video_roughcut.gui "$@"
+fi
+
 require_system_tool "ffmpeg" "Install it with: brew install ffmpeg"
 require_system_tool "ffprobe" "Install it with: brew install ffmpeg"
 require_system_tool "auto-editor" "Install it with: brew install auto-editor"
