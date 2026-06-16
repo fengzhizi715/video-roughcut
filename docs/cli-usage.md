@@ -12,6 +12,8 @@
   - 批量处理目录中的视频
 - `video-roughcut merge ... --output ...`
   - 先把多段录制合并成一个完整源视频
+- `video-roughcut split ... --start ... --end ...`
+  - 从视频中截取一个片段
 
 ## 处理单个视频
 
@@ -92,6 +94,43 @@ video-roughcut /path/to/demo.mp4 \
   --audio-bitrate 256k \
   --overwrite
 ```
+
+## 截取视频片段
+
+```bash
+video-roughcut split /path/to/input.mp4 --start 00:01:30 --end 00:05:00
+```
+
+```bash
+./run.sh split /path/to/input.mp4 --start 30.5 --duration 60 --output clip.mp4
+```
+
+参数说明：
+
+| 参数 | 说明 |
+|---|---|
+| `-s`, `--start` | 起始时间。默认 `0`。支持 `HH:MM:SS.mmm`、`MM:SS.mmm` 或秒数 |
+| `-e`, `--end` | 结束时间（与 `--duration` 二选一） |
+| `-d`, `--duration` | 时长（秒），与 `--end` 二选一 |
+| `-o`, `--output` | 输出路径。省略则自动生成 `xxx_HH.MM.SS.mmm-HH.MM.SS.mmm.mp4` |
+| `--reencode` | 重新编码以实现帧精确切割（较慢但更精确） |
+| `--overwrite` | 覆盖已有输出文件 |
+
+默认使用快速模式（`-c copy`，按关键帧切割、不重新编码）。如需帧精确的起止位置，添加 `--reencode`。
+
+## 图形界面 (GUI)
+
+```bash
+video-roughcut-gui
+```
+
+或通过脚本启动：
+
+```bash
+./run.sh --gui
+```
+
+GUI 将三个主要功能（粗剪、合并、拆分）组织为三个标签页，所有参数可视化配置，实时显示 ffmpeg 日志输出。
 
 ## 指定配置文件
 
