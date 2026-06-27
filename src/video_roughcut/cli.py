@@ -6,6 +6,7 @@ import sys
 from .backends.auto_editor import AutoEditorBackend, BackendError
 from .config import ConfigError, build_config
 from .merge import main as merge_main
+from .split import main as split_main
 from .reporting import write_cut_log, write_report
 from .runner import run_batch
 from .tools import DependencyError, require_dependencies
@@ -38,6 +39,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if argv and argv[0] == "merge":
         return merge_main(argv[1:])
+    if argv and argv[0] == "split":
+        return split_main(argv[1:])
 
     parser = create_parser()
     args = parser.parse_args(argv)

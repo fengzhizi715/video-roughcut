@@ -1,0 +1,3 @@
+[console_scripts]
+video-roughcut = video_roughcut.cli:main
+video-roughcut-gui = video_roughcut.gui:main

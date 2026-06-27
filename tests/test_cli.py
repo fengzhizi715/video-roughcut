@@ -26,3 +26,10 @@ class CliTests(unittest.TestCase):
 
         self.assertEqual(exit_code, 0)
         merge_main.assert_called_once_with(["part1.mp4", "part2.mp4", "--output", "merged.mp4"])
+
+    def test_split_subcommand_routes_to_split_module(self) -> None:
+        with patch("video_roughcut.cli.split_main", return_value=0) as split_main:
+            exit_code = main(["split", "input.mp4", "--start", "10", "--end", "30"])
+
+        self.assertEqual(exit_code, 0)
+        split_main.assert_called_once_with(["input.mp4", "--start", "10", "--end", "30"])

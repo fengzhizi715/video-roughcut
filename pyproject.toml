@@ -10,10 +10,12 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
   "PyYAML>=6.0",
+  "customtkinter>=5.2",
 ]
 
 [project.scripts]
 video-roughcut = "video_roughcut.cli:main"
+video-roughcut-gui = "video_roughcut.gui:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

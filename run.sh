@@ -90,6 +90,7 @@ require_system_tool "python3" "Install Python 3.10+ first."
 if [[ "${1:-}" == "--gui" ]]; then
   require_system_tool "ffmpeg" "Install it with: brew install ffmpeg"
   require_system_tool "ffprobe" "Install it with: brew install ffmpeg"
+  require_system_tool "auto-editor" "Install it with: brew install auto-editor"
 
   ensure_venv
   with_bootstrap_lock

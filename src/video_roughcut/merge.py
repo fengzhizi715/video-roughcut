@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from typing import Callable
 
 from .tools import DependencyError, find_tool, verify_tool
 
@@ -57,7 +58,12 @@ def build_merge_command(list_path: Path, output_path: Path, overwrite: bool) -> 
     return command
 
 
-def merge_videos(input_paths: list[Path], output_path: Path, overwrite: bool) -> None:
+def merge_videos(
+    input_paths: list[Path],
+    output_path: Path,
+    overwrite: bool,
+    command_runner: Callable[[list[str]], None] | None = None,
+) -> None:
     if len(input_paths) < 2:
         raise ValueError("merge requires at least two input files.")
     for input_path in input_paths:
@@ -78,6 +84,9 @@ def merge_videos(input_paths: list[Path], output_path: Path, overwrite: bool) ->
         list_path.write_text(_build_concat_list(input_paths), encoding="utf-8")
         command = build_merge_command(list_path, output_path, overwrite=overwrite)
         command[0] = ffmpeg_path
+        if command_runner is not None:
+            command_runner(command)
+            return
         completed = subprocess.run(command, capture_output=True, text=True)
         if completed.returncode != 0:
             raise MergeError(
